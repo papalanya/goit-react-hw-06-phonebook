@@ -11,7 +11,7 @@ export const Form = styled.form`
     margin-bottom: 5px;
     font-size: 20px;
   }
-  input {
+  TextField {
     width: 250px;
     font-size: 14px;
     border: 1px solid rgba(33, 33, 33, 0.2);

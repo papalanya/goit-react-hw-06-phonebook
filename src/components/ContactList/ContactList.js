@@ -1,28 +1,44 @@
-import PropTypes from 'prop-types';
+import { Wrapper, Item } from './ContactList.styled';
+import { Button } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { IoMdPerson, IoIosBackspace } from 'react-icons/io';
+import { deleteContact } from 'components/Redux/contactsSlice';
+import { getContacts, getFilter } from 'components/Redux/selectors';
 
-import { Contact } from 'components/ContactList/Contact/Contact';
-import { ContactsList } from 'components/ContactList/ContactList.styled';
-
-
-export const ContactList = ({ contacts, onDeleteContact }) => {
-  return (
-    <ContactsList>
-      {contacts.map(contact => (
-        <Contact
-          key={contact.id}
-          contact={contact}
-          onDeleteContact={onDeleteContact}
-        />
-      ))}
-    </ContactsList>
+export const ContactList = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const contactsFilter = useSelector(getFilter);
+  const handleDeleteButton = contactId => {
+    dispatch(deleteContact(contactId));
+  };
+  const visibleContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(contactsFilter.toLowerCase())
   );
-};
+  return (
+    <>
+      <Wrapper>
+        {visibleContacts.map(contact => (
+          <Item key={contact.id}>
+            <p>
+              <span>
+                <IoMdPerson />
+              </span>
+              {contact.name}: {contact.number}
+            </p>
 
-ContactsList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.exact({
-      id: PropTypes.string.isRequired,
-    }).isRequired
-  ),
-  onDeleteContact: PropTypes.func,
+            <Button
+              type="button"
+              onClick={() => handleDeleteButton(contact.id)}
+              variant="outlined"
+              startIcon={<IoIosBackspace />}
+              size="small"
+            >
+              Delete
+            </Button>
+          </Item>
+        ))}
+      </Wrapper>
+    </>
+  );
 };

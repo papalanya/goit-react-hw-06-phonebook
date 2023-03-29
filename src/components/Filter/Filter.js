@@ -1,29 +1,23 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { TextField } from '@mui/material';
+import { Text, Wrapper } from './Filter.styled';
+import { updateFilter } from '../Redux/contactsSlice';
+export const Filter = () => {
+  const dispatch = useDispatch();
 
-import { Container } from './Filter.styled';
-import { nanoid } from 'nanoid';
-
-export const Filter = ({ value, onChange }) => {
-  const nameInputId = nanoid();
-
+  const onInputChange = e => {
+    const filterValue = e.target.value;
+    dispatch(updateFilter(filterValue));
+  };
   return (
-    <Container>
-      <div>
-        <label htmlFor={nameInputId}>Find contacts by name</label>
-        <input
-            id={nameInputId}
-            type="text"
-            name="filter"
-            value={value}
-            onChange={onChange}
-        />
-      </div>
-    </Container>
+    <Wrapper>
+      <Text>Find contacts by name</Text>
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        size="small"
+        onChange={onInputChange}
+      />
+    </Wrapper>
   );
-};
-
-// eslint-disable-next-line react/no-typos
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
